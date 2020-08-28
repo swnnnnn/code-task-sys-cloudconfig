@@ -1,0 +1,65 @@
+server:
+  port: 8500
+
+spring:
+  application:
+    name: code-task-sys-cloudconfig
+  profiles:
+    active: native
+
+#logback-spring.xml 에서 프로젝트명으로 사용
+application:
+  project-name: code-task-sys-cloudconfig
+
+logging:
+  path:
+    root: /var/log/code-task
+  file: ${logging.path.root}/${application.project-name}/${spring.application.name}.log
+
+---
+#약속된 profile명으로서 cloud config server 가 git repository를 사용하지 않고 local File System을 사용
+#local에서 개발시 git repository를 사용하게 되면 서버 구동시 무조건 git remote repository에서 설정파일을 받아오기 때문에
+#간단한 테스트를 하려고 해도 설정파일을 모두 git remote repository에 push해야하는 번거로움 발생
+#이런 이유로 local 개발시에는 native profile을 사용
+#경로가 fix인데 Run 에서 Environment variables 항목을 통해서 경로 변경이 가능하다.
+#developer.git.local_git_storage=C:\project\projects\task\code.task.config
+spring:
+  profiles: native
+  cloud:
+    config:
+      server:
+        native:
+          search-locations:
+            - file:${developer.git.local-git-storage}
+            - file:${developer.git.local-git-storage}/infra
+            - file:${developer.git.local-git-storage}/services
+
+developer:
+  git:
+    local-git-storage: C:\project\projects\task\code.task.config
+
+logging:
+  path:
+    root: C:\project\logs\task
+
+---
+spring:
+  profiles: local
+  cloud:
+    config:
+      server:
+        native:
+          search-locations:
+            - file:${developer.git.local-git-storage}
+            - file:${developer.git.local-git-storage}/infra
+            - file:${developer.git.local-git-storage}/services
+
+developer:
+  git:
+    local-git-storage: C:\project\projects\task\code.task.config
+
+logging:
+  path:
+    root: C:\project\logs\task
+
+---
