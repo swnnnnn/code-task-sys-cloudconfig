@@ -31,7 +31,6 @@ spring:
         native:
           search-locations:
             - file:${developer.git.local-git-storage}
-            - file:${developer.git.local-git-storage}/infra
             - file:${developer.git.local-git-storage}/services
 
 developer:
@@ -51,7 +50,6 @@ spring:
         native:
           search-locations:
             - file:${developer.git.local-git-storage}
-            - file:${developer.git.local-git-storage}/infra
             - file:${developer.git.local-git-storage}/services
 
 developer:
